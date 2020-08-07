@@ -2,6 +2,7 @@ import paramiko
 import matplotlib.pyplot as plt
 import numpy as np
 import datetime
+import time
 host = "202.28.93.225"
 port = 22
 username = "sk"
@@ -77,7 +78,6 @@ def readfile(dat):
                 ep = int(ep)
                 testing.append([ep,loss_])
             except: pass
-    print('ploting')
     lo = np.array(loss)
     plt.plot(lo[:,0],lo[:,1],'r.',label='training loss')
     va = np.array(validation)
@@ -90,14 +90,33 @@ def readfile(dat):
     #plt.ylim((0,4))
     plt.grid()   
 
+fail_state = 0
 while True:
-    stdin, stdout, stderr = ssh.exec_command(command)
-    lines = stdout.readlines()
-    readfile(lines)
-    plt.title(command.split('cat ')[1] +'\n'+ str(datetime.datetime.now()))
-    mngr = plt.get_current_fig_manager()
-    # to put it into the upper left corner for example:
-    mngr.window.setGeometry(x,y+30,500, 500)
-    plt.pause(10)
-    plt.cla()
+    try:
+        stdin, stdout, stderr = ssh.exec_command(command)
+        lines = stdout.readlines()
+        readfile(lines)
+        plt.title(command.split('cat ')[1] +'\n'+ str(datetime.datetime.now()))
+        mngr = plt.get_current_fig_manager()
+        # to put it into the upper left corner for example:
+        mngr.window.setGeometry(x,y+30,500, 500)
+        
+        if fail_state == 1:
+            fail_state = 0
+            print('success...')
+
+        with open('monitor.txt','r') as f:
+            realtime = f.readline()
+        if realtime == 'realtime':
+            print('realtime mode '+command.split('cat ')[1])
+            plt.pause(120)
+        else:
+            plt.show()
+        
+        plt.cla()
+
+    except :
+        print('try again in 10sec...')
+        fail_state = 1
+        time.sleep(10)
     

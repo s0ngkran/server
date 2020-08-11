@@ -3,5 +3,5 @@ class Logger:
         self.filename = filename + '.txt'
     def write(self, text):
         with open(self.filename,'a') as f:
-            f.write(text +'\n')
+            f.write(str(text) +'\n')
     

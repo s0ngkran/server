@@ -5,14 +5,14 @@ import sys
 import os
 class Line():
     def __init__(self, filename):
-
+        
         self.url = 'https://notify-api.line.me/api/notify'
         self.token = 'kic5BCvffrnTLGoPHhiITqUYwp8DEQxZPN18ouRG6wU'
         self.headers = {"Authorization":"Bearer "+self.token}
         self.filename = filename
-
+        self.send('starting... ')
     def send(self, msg):
-        msg = str(self.filename + '\n>' + msg)
+        msg = str(self.filename + '\n>>>' + msg)
         r = requests.post(self.url, headers=self.headers , data = {'message':msg})
         # print( r.text)
     def test_send(self):
@@ -34,6 +34,6 @@ class Line():
         self.send_torch(t)
 
 if __name__ == '__main__':
-    line = Line('test.py')
+    line = Line(os.path.basename(__file__))
     line.test_send()
     

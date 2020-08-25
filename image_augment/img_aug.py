@@ -1,7 +1,7 @@
 import cv2
 import os 
 
-def resizeAndCrop(folder, savefolder, resizeto):
+def resizeAndCrop(folder, savefolder, resizeto, filename = '.bmp'):
     for _,__,fname in os.walk(folder):
         print('fin walk')
     i = 1
@@ -31,13 +31,13 @@ def resizeAndCrop(folder, savefolder, resizeto):
         resized = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
 
         croped = resized[crop_y1:crop_y2, crop_x1:crop_x2]
-        cv2.imwrite(savefolder+namei+'.jpg', croped)
+        cv2.imwrite(savefolder+namei+filename, croped)
         print(namei)
         i+=1
     print('finish resize and crop')
 if __name__ == "__main__":
-    folder = 'training/'
-    savefolder = 'temp/'
+    folder = 'green_screen/raw/'
+    savefolder = 'green_screen/img/'
     resizeto = 360
     resizeAndCrop(folder, savefolder, resizeto)
 

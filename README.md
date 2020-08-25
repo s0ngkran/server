@@ -1,5 +1,6 @@
 # resize and crop
 * resize to specific size
+* no problem with portrait or landscape image
 * crop from center
 ```
 import img_aug

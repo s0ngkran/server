@@ -1,4 +1,5 @@
 # resize and crop
+* aug all image in a folder
 * resize to specific size
 * no problem with portrait or landscape image
 * crop from center

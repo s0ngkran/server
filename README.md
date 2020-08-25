@@ -3,7 +3,7 @@
 * resize to specific size
 * no problem with portrait or landscape image
 * crop from center
-```
+```python
 import img_aug
 img_ = img_aug.resizeAndCrop(folder, savefolder, 360)
 ```

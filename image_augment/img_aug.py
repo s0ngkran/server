@@ -13,13 +13,25 @@ def resizeAndCrop(folder, savefolder, resizeto):
         if x < y :
             re_x = resizeto
             re_y = resizeto*y/x
+            crop_x1 = 0
+            crop_x2 = resizeto
+            cen = re_y/2
+            crop_y1 = cen-resizeto/2
+            crop_y2 = crop_y1 + resizeto
         else:
             re_y = resizeto
             re_x = resizeto*x/y
-        dim = (int(re_x), int(re_y))
+            crop_y1 = 0
+            crop_y2 = resizeto
+            cen = re_x/2
+            crop_x1 = cen-resizeto/2
+            crop_x2 = crop_x1 + resizeto 
+        re_x, re_y, crop_x1, crop_x2, crop_y1, crop_y2 = [int(i) for i in list((re_x, re_y, crop_x1, crop_x2, crop_y1, crop_y2))]
+        dim = (re_x, re_y)
         resized = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
-        resized = resized[:resizeto, :resizeto]
-        cv2.imwrite(savefolder+namei+'.jpg', resized)
+
+        croped = resized[crop_y1:crop_y2, crop_x1:crop_x2]
+        cv2.imwrite(savefolder+namei+'.jpg', croped)
         print(namei)
         i+=1
     print('finish resize and crop')

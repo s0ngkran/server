@@ -1,3 +1,20 @@
+# line.py
+* send massage
+* send torch image
+* wait 10 sec if connection error is raised.
+```python
+import line
+line = Line(os.path.basename(__file__))
+line.send('hi')
+```
+```python
+import torch
+t = torch.rand([100,100])
+line.send_torch(t)
+```
+![alt text](https://github.com/s0ngkran/server/blob/master/example/ex_send_line.jpg)
+</br></br></br>
+
 # img_aug.py
 * aug all image in a folder
 ```python

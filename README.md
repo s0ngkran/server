@@ -36,3 +36,11 @@ img_aug.resizeAndCrop(folder, savefolder, 360)
 replace_bg(folder_img, folder_bg, savefolder)
 ```
 ![alt text](https://github.com/s0ngkran/server/blob/master/image_augment/ex_replace.png)
+
+## pkl files to torch
+* the folder with other file allowed
+```python
+comment = '360x360 => 2 point'
+pkl2torch(pkl_folder, savefile, comment, suffix='_2p.pkl')
+```
+![alt text](https://github.com/s0ngkran/server/blob/master/image_augment/ex_pkl2torch.jpg)

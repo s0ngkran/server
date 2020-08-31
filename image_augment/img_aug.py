@@ -69,11 +69,92 @@ def replace_bg(folder_img, folder_bg, savefolder, filename='.bmp'):
         cv2.imwrite(savefolder + img_name, img)
         print(img_name, i+1,'/', len(img_names))
     print('fin all')
-    
-if __name__ == "__main__":
+def ex_replace_bg():
     folder_img = 'green_replaced/'
     folder_bg = 'bg_imgs/img/'
     savefolder = 'replaced_background/'
     replace_bg(folder_img, folder_bg, savefolder)
+def img2torch(folder_img, savefolder):
+    import torch 
+    assert folder_img[-1] == savefolder[-1] == '/'
+    for _,__,img_names in os.walk(folder_img):
+        print('fin walk')
+    for i, img_name in enumerate(img_names):
+        name = img_name[6:16]
+        assert int(name)
+        img = cv2.imread(folder_img + img_name) # y,x,ch
+        img = torch.FloatTensor(img/255).transpose(0,2) # ch,x,y
+        torch.save(img, savefolder + name)
+        print(img_name, i+1, len(img_names))
+def img2torch_gray(folder_img, savefolder):
+    import torch 
+    assert folder_img[-1] == savefolder[-1] == '/'
+    for _,__,img_names in os.walk(folder_img):
+        print('fin walk')
+    for i, img_name in enumerate(img_names):
+        name = img_name[6:16]
+        assert int(name)
+        img = cv2.imread(folder_img + img_name) # y,x,ch
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) # y,x
+        img = torch.FloatTensor(img/255).transpose(0,1).unsqueeze(0) # ch=1,x,y
+        torch.save(img, savefolder + name)
+        print(img_name, i+1, len(img_names))
+def pkl2torch(pkl_folder, savefile, comment, suffix='_2p.pkl'):
+    import torch 
+    import pickle
+    #test
+    try:
+        testload = pkl_folder + str(1).zfill(10) + suffix
+        with open(testload, 'rb') as f:
+            data = pickle.load(f)
+            keypoint = data['keypoint']
+            covered_point = data['covered_point']
+        fail = False
+    except:
+        fail = True
+
+    assert fail == False, 'fail to load %s'%testload
+
+    i = 0
+    keys = []
+    covs = []
+    while i!=-1:
+        try:
+            key, cov = [], []
+            name = str(i).zfill(10) + suffix
+            if i==0: name = str(1).zfill(10) + suffix
+            print(name)
+            with open(pkl_folder+name, 'rb') as f:
+                data = pickle.load(f)
+                keypoint = data['keypoint']
+                covered_point = data['covered_point']
+            for ind in range(len(keypoint)):
+                key.append(keypoint[ind])
+                cov.append(covered_point[ind])
+            key = torch.IntTensor(key)
+            cov = torch.IntTensor(cov)
+            keys.append(key)
+            covs.append(cov)
+            i+=1
+        except:
+            keys = torch.stack(keys)
+            covs = torch.stack(covs)
+            torch.save({'keypoint':keys
+                        ,'covered_point':covs
+                        ,'comment':comment
+            }, savefile)
+            print('saved', savefile)
+            i = -1
+if __name__ == "__main__":
+    # resizeAndCrop('random_background/raw/training_extend/', 'random_background/training_extend/', 360)
+    # ['green_screen/','replaced_background/','replaced_green/','random_background/']
+    # for i in ['replaced_background/','replaced_green/']:
+    #     folder_img = 'training/img/' + i
+    #     savefolder = 'training/img_torch/3channel/' + i
+    #     img2torch(folder_img, savefolder)
+
+    pkl_folder = 'random_background/training_extend/'
+    savefile = 'gt_training_extend.torch'
+    pkl2torch(pkl_folder, savefile, '360x360 => 2 point', suffix='_2p.pkl')
 
 

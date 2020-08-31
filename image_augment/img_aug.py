@@ -123,7 +123,6 @@ def pkl2torch(pkl_folder, savefile, comment, suffix='_2p.pkl'):
             key, cov = [], []
             name = str(i).zfill(10) + suffix
             if i==0: name = str(1).zfill(10) + suffix
-            print(name)
             with open(pkl_folder+name, 'rb') as f:
                 data = pickle.load(f)
                 keypoint = data['keypoint']
@@ -135,6 +134,7 @@ def pkl2torch(pkl_folder, savefile, comment, suffix='_2p.pkl'):
             cov = torch.IntTensor(cov)
             keys.append(key)
             covs.append(cov)
+            print(name)
             i+=1
         except:
             keys = torch.stack(keys)
@@ -153,8 +153,8 @@ if __name__ == "__main__":
     #     savefolder = 'training/img_torch/3channel/' + i
     #     img2torch(folder_img, savefolder)
 
-    pkl_folder = 'random_background/training_extend/'
-    savefile = 'gt_training_extend.torch'
+    pkl_folder = 'random_background/validation/'
+    savefile = 'gt_validation.torch'
     pkl2torch(pkl_folder, savefile, '360x360 => 2 point', suffix='_2p.pkl')
 
 

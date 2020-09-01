@@ -5,6 +5,7 @@
 if __name__ == "__main__":
     command = "cd skd/train0027; cat tr01.txt"
     run(command)
+    # run(command, show_pos=1, lim=400)
 ```
 ![alt text](https://github.com/s0ngkran/server/blob/master/example/ex_monitor.png)
 </br></br></br>

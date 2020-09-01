@@ -47,10 +47,10 @@ def readfile(data):
     plt.grid()   
 
 def run(command, show_pos):
-    host = "202.28.93.225"
-    port = 22
-    username = "sk"
-    password = "sk"
+    host = ###
+    port = ###
+    username = ###
+    password = ###
 
     # command = "cd skd/batchnorm/train02; cat tr32_seed10"
     # command = "cd skd/train0027; cat tr01.txt"

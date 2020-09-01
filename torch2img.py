@@ -143,6 +143,7 @@ def write_all(tensors):
             vcat_(tensor)
         imgs.append(cv2.imread('temp.jpg'))
     img = cv2.hconcat(imgs)
+    # cv2.imwrite('temp.jpg',img)
     return img
 def test_write_all():
     t = torch.load('ex_img')
@@ -192,6 +193,7 @@ def genimg_(img, out, gts, gtl, filename, msg='temp'): #img = [batch, ch, x, y]
     img = torch.cat([img, img, img], dim=1)
     img = write_all([img,img_,gts,gts_pred,gtl,gtl_pred])
     img = write_header_msg(img, msg)
+    cv2.imwrite('temp.jpg',img) # for send to line
     cv2.imwrite('saveimg/'+filename+'.jpg', img)
 def write_header_msg(oriimg, msg):
     assert len(oriimg.shape) == 3
@@ -200,7 +202,7 @@ def write_header_msg(oriimg, msg):
     font = cv2.FONT_HERSHEY_SIMPLEX 
     org = (10, 22) 
     fontScale = 0.6
-    color = (255, 255, 255) 
+    color = (255, 255, 255)
     thickness = 2
     img = cv2.putText(img, msg, org, font,  
                     fontScale, color, thickness, cv2.LINE_AA) 

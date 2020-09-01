@@ -44,3 +44,12 @@ comment = '360x360 => 2 point'
 pkl2torch(pkl_folder, savefile, comment, suffix='_2p.pkl')
 ```
 ![alt text](https://github.com/s0ngkran/server/blob/master/image_augment/ex_pkl2torch.jpg)
+
+## rename
+```python
+folder = 'random_background/new/'
+last_num = 10
+start_at = 6
+rename_in_folder(folder, last_num, start_at, '.bmp')
+```
+![alt text](https://github.com/s0ngkran/server/blob/master/image_augment/ex_rename.jpg)

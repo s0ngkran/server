@@ -9,7 +9,7 @@ def write(torch_img, inverse = True, filename = 'temp'):
     filename = filename + '.jpg'
     if len(torch_img.shape) == 3:
         channel = torch_img.shape[0]
-        assert channel in [3,20,11], '[channel, x, y] need channel in [3, 10, 11] but get ' + str(torch_img.shape)
+        assert channel in [3,20,11,2], '[channel, x, y] need channel in [3, 20, 11] but get ' + str(torch_img.shape)
         if channel == 20:
             #gtl mode
             torch_img = torch_img.mean(0)
@@ -25,6 +25,39 @@ def write(torch_img, inverse = True, filename = 'temp'):
             else: inverse = False
         elif channel == 11:
             torch_img = torch_img.max(0)[0]
+        elif channel == 2:
+            torch_img = torch_img.max(0)[0]
+    if len(torch_img.shape) == 2:
+        img = torch_img.transpose(1,0) # get horizontal
+    if len(torch_img.shape) == 3:
+        inverse = False
+        img = torch_img[(2,1,0),:,:].transpose(1,2) # get horizontal
+    if inverse:
+        img = 1-img
+    save_image(img, filename)
+def write_(torch_img, inverse = True, filename = 'temp'):
+    assert len(torch_img.shape) in [2,3]
+    filename = filename + '.jpg'
+    if len(torch_img.shape) == 3:
+        channel = torch_img.shape[0]
+        assert channel in [3,20,11,2], '[channel, x, y] need channel in [3, 20, 11] but get ' + str(torch_img.shape)
+        if channel == 20:
+            #gtl mode
+            torch_img = torch_img.mean(0)
+            mx = torch_img.max()
+            mn = torch_img.min()
+            torch_img = (torch_img-mn)/(mx-mn)
+            mx = torch_img.max()
+            mn = torch_img.min()
+            mean = torch_img.mean()
+            mid = (mx-mn)/2
+            if mean<mid:
+                inverse = True
+            else: inverse = False
+        elif channel == 11:
+            torch_img = torch_img.max(0)[0]
+        elif channel == 2:
+            torch_img = torch_img.mean(0)
     if len(torch_img.shape) == 2:
         img = torch_img.transpose(1,0) # get horizontal
     if len(torch_img.shape) == 3:
@@ -39,7 +72,13 @@ def vcat(tensors):
         write(tensors[i], filename='temp%s'%i)
     npys = [cv2.imread('temp%s.jpg'%i) for i in range(n)]
     cv2.imwrite('temp.jpg',cv2.vconcat(npys))
-    
+def vcat_(tensors):
+    n = len(tensors)
+    for i in range(n):
+        write_(tensors[i], filename='temp%s'%i)
+    npys = [cv2.imread('temp%s.jpg'%i) for i in range(n)]
+    cv2.imwrite('temp.jpg',cv2.vconcat(npys))  
+
 def test_write():
     # t = torch.rand([3,60,60])
     # t = torch.rand([60,60])
@@ -97,16 +136,20 @@ def test_write_gtl():
     read()
 def write_all(tensors):
     imgs = []
-    for tensor in tensors:
-        vcat(tensor)
+    for i,tensor in enumerate(tensors):
+        if i!=5:
+            vcat(tensor)
+        else:
+            vcat_(tensor)
         imgs.append(cv2.imread('temp.jpg'))
     img = cv2.hconcat(imgs)
-    cv2.imwrite('temp.jpg',img)
+    return img
 def test_write_all():
     t = torch.load('ex_img')
     ts = torch.stack([t, t, t])
     tss = [ts,ts,ts]
     write_all(tss)
+    cv2.imwrite('temp.jpg',img)
     read()
 
 def feed():
@@ -141,10 +184,42 @@ def genimg(img, out, gts, gtl):
     gtl_pred = out[5]
     img_ = img[:,0,:,:]*0.4 + gts_pred.max(1)[0]*0.6
     write_all([img,img_,gts,gts_pred,gtl,gtl_pred])
-
+def genimg_(img, out, gts, gtl, filename, msg='temp'): #img = [batch, ch, x, y]
+    img = F.interpolate(img, [45,45])
+    gts_pred = out[1]
+    gtl_pred = out[0]
+    img_ = img[:,0,:,:]*0.4 + gts_pred.max(1)[0]*0.6
+    img = torch.cat([img, img, img], dim=1)
+    img = write_all([img,img_,gts,gts_pred,gtl,gtl_pred])
+    img = write_header_msg(img, msg)
+    cv2.imwrite('saveimg/'+filename+'.jpg', img)
+def write_header_msg(oriimg, msg):
+    assert len(oriimg.shape) == 3
+    assert type(msg)==str, 'msg argument needs str type'
+    img = np.zeros((35, oriimg.shape[1], 3))
+    font = cv2.FONT_HERSHEY_SIMPLEX 
+    org = (10, 22) 
+    fontScale = 0.6
+    color = (255, 255, 255) 
+    thickness = 2
+    img = cv2.putText(img, msg, org, font,  
+                    fontScale, color, thickness, cv2.LINE_AA) 
+    print(img.shape , oriimg.shape)
+    img = np.vstack((img, oriimg))
+    print(img.shape)
+    cv2.imwrite('testhead.jpg', img)
+    return img
+    # cv2.imwrite('header.jpg',img)
+def test_write_header_msg():
+    tempimg = cv2.imread('temp.jpg')
+    write_header_msg(tempimg, 'tr te va epoch')
 if __name__ == '__main__':
     # test_write_all()
     # test_resize()
     # feed()
     # test_vcat() 
-    test_write()   
+    # test_write()   
+    # a = torch.rand(torch.Size([5, 1, 45, 45]))
+    # img = torch.cat([a, a, a], dim=1)
+    # print(img.shape)
+    test_write_header_msg()

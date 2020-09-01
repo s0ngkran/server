@@ -91,8 +91,18 @@ def img2torch_gray(folder_img, savefolder):
     assert folder_img[-1] == savefolder[-1] == '/'
     for _,__,img_names in os.walk(folder_img):
         print('fin walk')
+
+    #  case of name = '00000000001.bmp'
+    testcase = False
+    try:
+        int(img_names[0][:10])
+        testcase = True
+    except :
+        testcase = False
+    assert testcase, 'check the name of source, need zfill(10) pattern but got %s'%(img_names[0])
+    
     for i, img_name in enumerate(img_names):
-        name = img_name[6:16]
+        name = img_name[:10]
         assert int(name)
         img = cv2.imread(folder_img + img_name) # y,x,ch
         img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) # y,x
@@ -170,6 +180,7 @@ def rename_in_folder(folder, last_num, start_at, suffix):
             os.remove(folder + name)
     except:
         print('fin')
+
 if __name__ == "__main__":
     # resizeAndCrop('random_background/raw/training_extend/', 'random_background/training_extend/', 360)
     # ['green_screen/','replaced_background/','replaced_green/','random_background/']
@@ -178,14 +189,16 @@ if __name__ == "__main__":
     #     savefolder = 'training/img_torch/3channel/' + i
     #     img2torch(folder_img, savefolder)
 
-    # pkl_folder = 'random_background/validation/'
-    # savefile = 'gt_validation.torch'
+    # pkl_folder = 'random_background/new/'
+    # savefile = 'gt_training.torch'
     # pkl2torch(pkl_folder, savefile, '360x360 => 2 point', suffix='_2p.pkl')
 
-    folder = 'random_background/new/'
-    last_num = 10
-    start_at = 6
-    rename_in_folder(folder, last_num, start_at, '.bmp')
+    # folder = 'random_background/new/'
+    # last_num = 10
+    # start_at = 6
+    # rename_in_folder(folder, last_num, start_at, '.bmp')
+
+    img2torch_gray('training/img/random_background/', 'training/img_torch/random_background/')
 
 
 

@@ -1,3 +1,14 @@
+# monitor2.py
+* auto monitor the log file
+* set realtime by change the value in monitor.txt to 'realtime'
+```python
+if __name__ == "__main__":
+    command = "cd skd/train0027; cat tr01.txt"
+    run(command)
+```
+![alt text](https://github.com/s0ngkran/server/blob/master/example/ex_monitor.png)
+</br></br></br>
+
 # line.py
 * send massage
 * send torch image

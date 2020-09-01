@@ -145,6 +145,31 @@ def pkl2torch(pkl_folder, savefile, comment, suffix='_2p.pkl'):
             }, savefile)
             print('saved', savefile)
             i = -1
+def rename_in_folder(folder, last_num, start_at, suffix):
+    assert folder[-1] == '/'
+    assert type(last_num) == type(start_at) == int
+    assert type(suffix) == str
+    try:
+        for i in range(last_num):
+            i = last_num-i
+            name = str(i).zfill(10)
+            src = folder + name + suffix
+            
+
+            i += start_at - 1
+            name = str(i).zfill(10)
+            dst = folder + name + suffix
+         
+            os.rename(src, dst)
+            print(src, '>>>', dst)
+        
+        #del
+        for i in range(start_at-1):
+            i += 1
+            name = str(i).zfill(10) + suffix
+            os.remove(folder + name)
+    except:
+        print('fin')
 if __name__ == "__main__":
     # resizeAndCrop('random_background/raw/training_extend/', 'random_background/training_extend/', 360)
     # ['green_screen/','replaced_background/','replaced_green/','random_background/']
@@ -153,8 +178,14 @@ if __name__ == "__main__":
     #     savefolder = 'training/img_torch/3channel/' + i
     #     img2torch(folder_img, savefolder)
 
-    pkl_folder = 'random_background/validation/'
-    savefile = 'gt_validation.torch'
-    pkl2torch(pkl_folder, savefile, '360x360 => 2 point', suffix='_2p.pkl')
+    # pkl_folder = 'random_background/validation/'
+    # savefile = 'gt_validation.torch'
+    # pkl2torch(pkl_folder, savefile, '360x360 => 2 point', suffix='_2p.pkl')
+
+    folder = 'random_background/new/'
+    last_num = 10
+    start_at = 6
+    rename_in_folder(folder, last_num, start_at, '.bmp')
+
 
 

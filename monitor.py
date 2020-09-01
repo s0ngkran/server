@@ -2,10 +2,10 @@ import paramiko
 import matplotlib.pyplot as plt
 import numpy as np
 import datetime
-host = "202.28.93.225"
-port = 22
-username = "sk"
-password = "sk"
+host = ###
+port = ###
+username = ###
+password = ###
 
 command = "cd skd/batchnorm/train02; cat tr32_seed10"
 command = input('command => ')

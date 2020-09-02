@@ -1,5 +1,10 @@
 import cv2
 import os 
+import torch
+import numpy as np
+import pickle
+try: import matplotlib.pyplot as plt
+except :pass
 
 def resizeAndCrop(folder, savefolder, resizeto, filename = '.bmp'):
     for _,__,fname in os.walk(folder):
@@ -181,6 +186,84 @@ def rename_in_folder(folder, last_num, start_at, suffix):
     except:
         print('fin')
 
+def rotate(image, angle, center = None, scale = 1.0):
+    (h, w) = image.shape[:2]
+    if center is None:
+        center = (w / 2, h / 2)
+    M = cv2.getRotationMatrix2D(center, -angle, scale)
+    rotated = cv2.warpAffine(image, M, (w, h))
+    return rotated
+def rotate_point(gt_i, angle, center):
+    return [rotate_point_(center, p, angle) for p in gt_i]
+def rotate_point_(origin, p, degrees):
+    angle = np.deg2rad(degrees)
+    R = np.array([[np.cos(angle), -np.sin(angle)],
+                [np.sin(angle),  np.cos(angle)]])
+    o = np.atleast_2d(origin)
+    p = np.atleast_2d(p)
+    return np.squeeze((R @ (p.T-o.T) + o.T).T)
+
+
+def aug_rotate(angle, img_folder, gt_file, save_imfolder, save_pklfolder, start_name, suffix=None):
+
+    assert img_folder[-1] == save_imfolder[-1] == save_pklfolder[-1] == '/'
+    assert type(start_name) is int
+    assert gt_file[-6:] == '.torch'
+    if suffix is None: suffix = '.bmp'
+    for _,__,img_names in os.walk(img_folder):
+        print('fin walk')
+    
+    assert int(img_names[0][:10]), 'need 0000000001.bmp format but got %s'%img_names[0]
+    gt = torch.load(gt_file)['keypoint']
+    gt_cov = torch.load(gt_file)['covered_point']
+    img = cv2.imread(img_folder+img_names[0])
+    img_size = img.shape 
+    assert img_size[0] == img_size[1], 'need 1:1 of resolution'
+    center = int(img_size[1]/2), int(img_size[0]/2)
+    counter = 0
+    for i, img_name in enumerate(img_names):
+        namei = img_name[:10]
+        gt_ind = int(namei)
+        img = cv2.imread(img_folder+img_name)
+        gt_i = gt[gt_ind]
+        gt_cov_i = gt_cov[gt_ind]
+        ## for check
+        # for x,y in gt_i:
+        #     plt.plot(x,y,'ro')
+        # plt.imshow(img)
+        # plt.show()
+        img = rotate(img, angle, center)
+        point = rotate_point(gt_i, angle, center)
+        for x,y in point:
+            if x<0 or x>img_size[1] or y<0 or y>img_size[0]:
+                print('out of bound')
+                continue
+                # raise Exception("rotated groundtruth out of bound")
+        point = [[int(x),int(y)] for x, y in point]
+
+        name = start_name+counter
+        name = str(name).zfill(10) 
+        cv2.imwrite(save_imfolder + name + suffix, img)
+
+        dat = {'keypoint':point, 'covered_point':gt_cov_i}
+        pklname = name + '_2p.pkl'
+        with open(save_pklfolder + pklname, 'wb') as handle:
+            pickle.dump(dat, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+        counter += 1
+        print(name)
+        
+    # print(gt['keypoint'][:10])
+
+def test_aug_rotate():
+    angle = 10
+    img_folder = 'example_folder/'
+    save_folder = 'example_folder_save/'
+    start_name = 21
+    gt_file = 'gt_training.torch'
+    aug_rotate(angle, img_folder, gt_file, save_folder, start_name, suffix=None)
+
+    
 if __name__ == "__main__":
     # resizeAndCrop('random_background/raw/training_extend/', 'random_background/training_extend/', 360)
     # ['green_screen/','replaced_background/','replaced_green/','random_background/']
@@ -198,7 +281,15 @@ if __name__ == "__main__":
     # start_at = 6
     # rename_in_folder(folder, last_num, start_at, '.bmp')
 
-    img2torch_gray('training/img/random_background/', 'training/img_torch/random_background/')
+    # img2torch_gray('training/img/random_background/', 'training/img_torch/random_background/')
+    angle = -90
+    img_folder = 'random_background/training_mix/'
+    gt_file = 'gt_training.torch'
+    save_imfolder = 'random_background/training_aug/'
+    save_pklfolder = 'random_background/training_aug_pkl/'
+    start_name = 25120
+    aug_rotate(angle, img_folder, gt_file, save_imfolder, save_pklfolder, start_name, suffix=None)
+    
 
 
 

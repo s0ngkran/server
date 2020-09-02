@@ -42,10 +42,23 @@ img_aug.resizeAndCrop(folder, savefolder, 360)
 ```
 ![alt text](https://github.com/s0ngkran/server/blob/master/image_augment/ex_img_augment.png)
 
+## rotate
+* rotate image and groundtruth in one command
+```python
+angle = 30
+img_folder = 'random_background/training_mix/'
+gt_file = 'gt_training.torch'
+save_imfolder = 'random_background/training_aug/'
+save_pklfolder = 'random_background/training_aug_pkl/'
+start_name = 3712
+img_aug.aug_rotate(angle, img_folder, gt_file, save_imfolder, save_pklfolder, start_name, suffix=None)
+```
+![alt text](https://github.com/s0ngkran/server/blob/master/image_augment/ex_rotate.jpg)
+
 ## replace background
 * replace images with random background
 ```python
-replace_bg(folder_img, folder_bg, savefolder)
+img_aug.replace_bg(folder_img, folder_bg, savefolder)
 ```
 ![alt text](https://github.com/s0ngkran/server/blob/master/image_augment/ex_replace.png)
 
@@ -53,7 +66,7 @@ replace_bg(folder_img, folder_bg, savefolder)
 * the folder with other file allowed
 ```python
 comment = '360x360 => 2 point'
-pkl2torch(pkl_folder, savefile, comment, suffix='_2p.pkl')
+img_aug.pkl2torch(pkl_folder, savefile, comment, suffix='_2p.pkl')
 ```
 ![alt text](https://github.com/s0ngkran/server/blob/master/image_augment/ex_pkl2torch.jpg)
 
@@ -62,6 +75,6 @@ pkl2torch(pkl_folder, savefile, comment, suffix='_2p.pkl')
 folder = 'random_background/new/'
 last_num = 10
 start_at = 6
-rename_in_folder(folder, last_num, start_at, '.bmp')
+img_aug.rename_in_folder(folder, last_num, start_at, '.bmp')
 ```
 ![alt text](https://github.com/s0ngkran/server/blob/master/image_augment/ex_rename.jpg)

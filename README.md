@@ -50,7 +50,7 @@ img_folder = 'random_background/training_mix/'
 gt_file = 'gt_training.torch'
 save_imfolder = 'random_background/training_aug/'
 save_pklfolder = 'random_background/training_aug_pkl/'
-start_name = 3712
+start_name = 2792
 img_aug.aug_rotate(angle, img_folder, gt_file, save_imfolder, save_pklfolder, start_name, suffix=None)
 ```
 ![alt text](https://github.com/s0ngkran/server/blob/master/image_augment/ex_rotate.jpg)

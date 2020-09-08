@@ -125,7 +125,15 @@ def get_input(oldname):
     epoch = 0
     cmode = False
     show_pos = 1
-    tr = input('name>>')
+    print('')
+    print('--------------------options--------------------')
+    print('<str:log_name>  => get graph')
+    print('<enter>         => update graph')
+    print('<int:epoch>     => get mAP of ')
+    print('                   previous log_name at a epoch')
+    print('-----------------------------------------------')
+    print('')
+    tr = input('command>>')
     if tr == '':
         tr = oldname
     elif 'tr' not in tr:
@@ -139,6 +147,7 @@ def get_input(oldname):
         epoch = int(epoch)
         tr = tr.split(' ')[0]
     else:
+        print('<enter> => Quick choose position 1')
         print('''
         \nshow_position
         1 2 3

@@ -2,7 +2,7 @@
 * auto monitor the log file
 * set realtime mode by change the value in monitor.txt to 'realtime'
 ```cmd
-python monitor2.py
+>python monitor2.py
 ```
 ![alt text](https://github.com/s0ngkran/server/blob/master/example/ex_monitor2.jpg)
 </br></br></br>

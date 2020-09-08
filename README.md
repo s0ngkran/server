@@ -1,11 +1,8 @@
 # monitor2.py
 * auto monitor the log file
 * set realtime mode by change the value in monitor.txt to 'realtime'
-```python
-if __name__ == "__main__":
-    command = "cd skd/train0027; cat tr01.txt"
-    run(command)
-    # run(command, show_pos=1, lim=400) #
+```cmd
+python monitor2.py
 ```
 ![alt text](https://github.com/s0ngkran/server/blob/master/example/ex_monitor2.jpg)
 </br></br></br>

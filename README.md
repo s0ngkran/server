@@ -53,6 +53,19 @@ img_aug.aug_rotate(angle, img_folder, gt_file, save_imfolder, save_pklfolder, st
 ```
 ![alt text](https://github.com/s0ngkran/server/blob/master/image_augment/ex_rotate.jpg)
 
+## scale
+* rescale image and groundtruth in one command
+```python
+scale = 0.7
+img_folder = 'example_folder/'
+gt_file = 'gt_training.torch'
+save_imfolder = 'example_folder_save/'
+save_pklfolder = save_imfolder
+start_name = 352
+aug_scale(scale, img_folder, gt_file, save_imfolder, save_pklfolder, start_name, suffix=None)
+```
+![alt text](https://github.com/s0ngkran/server/blob/master/image_augment/ex_scale.jpg)
+
 ## replace background
 * replace images with random background
 ```python

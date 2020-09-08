@@ -61,7 +61,7 @@ img_aug.replace_bg(folder_img, folder_bg, savefolder)
 ![alt text](https://github.com/s0ngkran/server/blob/master/image_augment/ex_replace.png)
 
 ## pkl files to torch
-* the folder with other file allowed
+* the folder with other files are allowed
 ```python
 comment = '360x360 => 2 point'
 img_aug.pkl2torch(pkl_folder, savefile, comment, suffix='_2p.pkl')
@@ -69,7 +69,7 @@ img_aug.pkl2torch(pkl_folder, savefile, comment, suffix='_2p.pkl')
 ![alt text](https://github.com/s0ngkran/server/blob/master/image_augment/ex_pkl2torch.jpg)
 
 ## rename
-* allowed the folder that compose with the other files.
+* the folder with other files are allowed
 ```python
 folder = 'random_background/new/'
 last_num = 10

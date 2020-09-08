@@ -37,6 +37,7 @@ import img_aug
 * resize to specific size
 * no problem with portrait or landscape image
 * crop from center
+* ready to go to hand_keypoint_generator program
 ```python
 img_aug.resizeAndCrop(folder, savefolder, 360)
 ```

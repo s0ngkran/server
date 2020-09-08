@@ -7,7 +7,7 @@ if __name__ == "__main__":
     run(command)
     # run(command, show_pos=1, lim=400)
 ```
-![alt text](https://github.com/s0ngkran/server/blob/master/example/ex_monitor.png)
+![alt text](https://github.com/s0ngkran/server/blob/master/example/ex_monitor2.jpg)
 </br></br></br>
 
 # line.py

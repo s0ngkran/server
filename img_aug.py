@@ -7,10 +7,10 @@ import random
 try: import matplotlib.pyplot as plt
 except :pass
 
-def resizeAndCrop(folder, savefolder, resizeto, filename = '.bmp'):
+def resizeAndCrop(folder, savefolder, resizeto, startat=1, filename = '.bmp'):
     for _,__,fname in os.walk(folder):
         print('fin walk')
-    i = 1
+    i = startat
     for name in fname:
         namei = str(i).zfill(10)
         img = cv2.imread(folder+name)

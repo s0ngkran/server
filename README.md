@@ -90,3 +90,12 @@ start_at = 6
 img_aug.rename_in_folder(folder, last_num, start_at, '.bmp')
 ```
 ![alt text](https://github.com/s0ngkran/server/blob/master/image_augment/ex_rename.jpg)
+
+## rename when delete a file
+* the folder with other files are allowed
+```python
+folder = 'test_folder/'
+img_aug.rename_all(folder)
+```
+![alt text](https://github.com/s0ngkran/server/blob/master/image_augment/ex_rename_all.png)
+

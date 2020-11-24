@@ -361,7 +361,17 @@ def test_aug_scale():
     save_pklfolder = save_imfolder
     start_name = 352
     aug_scale(scale, img_folder, gt_file, save_imfolder, save_pklfolder, start_name, suffix=None)
-   
+def rename_all(folder):
+    assert folder[-1] == '/'
+    for _,__,fname in os.walk(folder):
+        print('fin walk')
+    fname.sort(reverse=False)
+    n = len(fname)
+    for i, name in enumerate(fname):
+        i = i+1
+        namenew = str(i).zfill(10)+'.bmp'
+        os.rename(folder+name, folder+namenew)
+        print(i,'/',n,'  ',name,'>>>',namenew)
 if __name__ == "__main__":
     # angle = 30
     # img_folder = 'random_background/validation_mix_img/'

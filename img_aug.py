@@ -223,8 +223,8 @@ def rotate(image, angle, center = None, scale = 1.0):
     M = cv2.getRotationMatrix2D(center, -angle, scale)
     rotated = cv2.warpAffine(image, M, (w, h))
     return rotated
-def rotate_point(gt_i, angle, center):
-    return [rotate_point_(center, p, angle) for p in gt_i]
+def rotate_point(keypoint, angle, center):
+    return [rotate_point_(center, p, angle) for p in keypoint]
 def rotate_point_(origin, p, degrees):
     angle = np.deg2rad(degrees)
     R = np.array([[np.cos(angle), -np.sin(angle)],

@@ -99,3 +99,13 @@ img_aug.rename_all(folder)
 ```
 ![alt text](https://github.com/s0ngkran/server/blob/master/image_augment/ex_rename_all.png)
 
+## quary bmp with pkl
+```python
+import quary
+imgfolder = 'bmp/' 
+img_i = 1  #related to '00000000001.bmp'
+pkl_path = 'label.pkl' # contains {'1':content_of_1, '2':content_of_2, ...}
+quary.read_data_html(imgfolder, 1, pkl_path=pkl_path)
+```
+![alt text](https://github.com/s0ngkran/server/blob/master/image_augment/ex_read_data_html.png)
+
